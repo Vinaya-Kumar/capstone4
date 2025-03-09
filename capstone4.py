@@ -1,4 +1,4 @@
-pip install dotenv
+pip install python-dotenv
 import sys
 import asyncio
 if sys.platform == "win32":
