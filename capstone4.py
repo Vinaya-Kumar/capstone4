@@ -13,11 +13,10 @@ from PIL import Image
 import torch
 from typing import List, Optional
 
-# Load environment variables from .env file
-#load_dotenv()
-
-
-
+# Instead of loading .env, read secrets from st.secrets
+SERPER_API_KEY = st.secrets["SERPER_API_KEY"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+FIRECRAWL_API_KEY = st.secrets["FIRECRAWL_API_KEY"]
 # -----------------------------------------------------------------------------
 # Initialize Firecrawl
 # -----------------------------------------------------------------------------
