@@ -1,4 +1,4 @@
-!pip install -r requirements.txt
+
 import sys
 import asyncio
 if sys.platform == "win32":
