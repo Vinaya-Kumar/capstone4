@@ -1,3 +1,4 @@
+pip install dotenv
 import sys
 import asyncio
 if sys.platform == "win32":
