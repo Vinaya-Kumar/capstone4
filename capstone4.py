@@ -9,27 +9,14 @@ import streamlit as st
 import json
 import sqlite3
 from PIL import Image
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import torch
 from typing import List, Optional
 
 # Load environment variables from .env file
-load_dotenv()
+#load_dotenv()
 
-# Check and set required environment variables
-serper_dev_key = os.getenv("SERPER_API_KEY")
-if not serper_dev_key:
-    raise ValueError("SERPER_API_KEY is not set in your .env file.")
-os.environ["SERPER_API_KEY"] = serper_dev_key
 
-openai_key = os.getenv("OPENAI_API_KEY")
-if not openai_key:
-    raise ValueError("OPENAI_API_KEY is not set in your .env file.")
-os.environ["OPENAI_API_KEY"] = openai_key
-
-firecrawl_key = os.getenv("FIRECRAWL_API_KEY")
-if not firecrawl_key:
-    raise ValueError("FIRECRAWL_API_KEY is not set in your .env file.")
 
 # -----------------------------------------------------------------------------
 # Initialize Firecrawl
