@@ -21,7 +21,7 @@ FIRECRAWL_API_KEY = st.secrets["FIRECRAWL_API_KEY"]
 # Initialize Firecrawl
 # -----------------------------------------------------------------------------
 from firecrawl import FirecrawlApp
-firecrawl_app = FirecrawlApp(api_key=firecrawl_key)
+#firecrawl_app = FirecrawlApp(api_key=firecrawl_key)
 
 # -----------------------------------------------------------------------------
 # CLIP-based Image Analysis
