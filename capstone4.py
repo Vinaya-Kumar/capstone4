@@ -1,9 +1,4 @@
 
-import sys
-import asyncio
-if sys.platform == "win32":
-    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
-
 import os
 import streamlit as st
 import json
@@ -218,7 +213,7 @@ def retrieve_selection(user_id):
 st.title("Fashion Designer Agent")
 st.write("Curate your wardrobe for any occasion using our multi-agent system.")
 
-menu = st.sidebar.radio("Navigation", ["Upload Photos", "Event Preferences", "Recommendations", "Saved Selections", "Show document.json"])
+menu = st.sidebar.radio("Navigation", ["Upload Photos", "Event Preferences", "Recommendations", "Saved Selections", "Cart"])
 
 if menu == "Upload Photos":
     st.header("Step 1: Upload Your Photos")
@@ -298,22 +293,14 @@ elif menu == "Saved Selections":
     else:
         st.info("No selections saved yet.")
 
-elif menu == "Show document.json":
-    st.header("Raw JSON Document with Top 3 Recommendations per Category")
-    try:
-        with open("document.json", "r") as f:
-            data = json.load(f)
-        for category, content in data.items():
-            st.subheader(f"Category: {category}")
-            if isinstance(content, dict) and "data" in content and "products" in content["data"]:
-                products = content["data"]["products"]
-                for idx, prod in enumerate(products[:3]):
-                    st.write(f"**Recommendation {idx+1}:**")
-                    st.write(f"- Name: {prod.get('name', 'N/A')}")
-                    st.write(f"- Price: {prod.get('price', 'N/A')}")
-                    st.write(f"- Link: {prod.get('link', 'N/A')}")
-                    st.markdown("---")
-            else:
-                st.write(f"Data for {category} is not in expected format: {content}")
-    except Exception as e:
-        st.error(f"Error reading document.json: {e}")
+elif menu == "Cart":
+    st.header("Your Cart")
+    if st.session_state["cart"]:
+        for idx, item in enumerate(st.session_state["cart"]):
+            st.write(f"**Item {idx+1}:** {item['name']} | Price: {item['price']}")
+            st.markdown(f"[Buy Now Link]({item['link']})")
+        if st.button("Clear Cart"):
+            clear_cart()
+            st.success("Cart cleared.")
+    else:
+        st.info("Your cart is empty.")
