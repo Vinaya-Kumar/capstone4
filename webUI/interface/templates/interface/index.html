@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LaMB Web Interface</title>
+    <link rel="stylesheet" href="{% static 'interface/style.css' %}">
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="card">
+
+        <!-- Logo -->
+        <img src="{% static 'interface/logo.png' %}" alt="University Logo" class="logo">
+
+        <!-- Heading -->
+        <h1>LaMB Web Interface</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Pretrained Model -->
+            <div class="form-group">
+                <label for="model">Pretrained Model</label>
+                <select id="model" name="model" required>
+                    <option value="">Select a model</option>
+                    <option value="openai-community/gpt2">GPT-2</option>
+                    <option value="distilbert/distilgpt2">DistilGPT-2</option>
+                    <option value="sshleifer/tiny-gpt2">Tiny GPT-2</option>
+                </select>
+            </div>
+
+            <!-- Task Selection -->
+            <div class="form-group">
+                <label>Task</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="task" value="next_token">
+                        Next Token Prediction
+                    </label>
+
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="task" value="embeddings">
+                        Generate Input Embeddings
+                    </label>
+                </div>
+            </div>
+
+            <!-- Input File -->
+            <div class="form-group">
+                <label for="input_file">Input (Text / Image)</label>
+                <input
+                    type="file"
+                    id="input_file"
+                    name="input_file"
+                    accept=".txt,image/*"
+                    required
+                >
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+
+        <!-- ✅ Results appear here -->
+        {% if results %}
+        <h3 class="results-title">Results</h3>
+
+        <div class="results-grid">
+
+            {% if results.next_token %}
+            <div class="result-card">
+                <div class="result-card-header">
+                <h4>Next Token Prediction</h4>
+                </div>
+
+                {% for row in results.next_token %}
+                <div class="result-item">
+                    <div class="kv">
+                    <span class="k">Input</span>
+                    <div class="v mono">{{ row.input }}</div>
+                    </div>
+
+                    <div class="kv">
+                    <span class="k">Next token</span>
+                    <div class="v mono token">{{ row.output }}</div>
+                    {# Optional: if you also pass output_repr from backend #}
+                    {% if row.output_repr %}
+                        <div class="hint">repr: <span class="mono">{{ row.output_repr }}</span></div>
+                    {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if results.embeddings %}
+            <div class="result-card">
+                <div class="result-card-header">
+                <h4>Embeddings</h4>
+                <div class="subtext">Showing first 10 values (preview)</div>
+                </div>
+
+                {% for row in results.embeddings %}
+                <div class="result-item">
+                    <div class="kv">
+                    <span class="k">Text</span>
+                    <div class="v mono">{{ row.text }}</div>
+                    </div>
+
+                    <div class="kv-inline">
+                    <div class="chip">Dim: {{ row.dim }}</div>
+                    </div>
+
+                    <div class="kv">
+                    <span class="k">Preview</span>
+                    <div class="v mono preview">
+                        {{ row.preview }}
+                    </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+
+    </div>
+</div>
+
+</body>
+</html>
